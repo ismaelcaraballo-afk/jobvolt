@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JobVolt: The Clean Energy Workforce Explosion</title>
+<meta name="description" content="The two fastest-growing jobs in America are both in clean energy. Explore the workforce revolution powering the energy transition.">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: #0a0f1a;
+  color: #e2e8f0;
+  min-height: 100vh;
+}
+
+/* Header */
+.hero {
+  background: linear-gradient(135deg, #0f172a 0%, #1a2332 50%, #0f1f15 100%);
+  border-bottom: 1px solid #1e3a5f;
+  padding: 50px 20px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%; width: 200%; height: 200%;
+  background: radial-gradient(ellipse at 30% 50%, rgba(52,211,153,0.05) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 50%, rgba(56,189,248,0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #34d399, #38bdf8, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+  position: relative;
+}
+.hero .tagline {
+  font-size: 1.2rem;
+  color: #94a3b8;
+  max-width: 680px;
+  margin: 0 auto 6px;
+  position: relative;
+}
+.hero .sub-tagline {
+  font-size: 0.95rem;
+  color: #64748b;
+  position: relative;
+}
+
+/* Stats bar */
+.stats-bar {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  padding: 24px 20px;
+  background: #0f172a;
+  border-bottom: 1px solid #1e293b;
+  flex-wrap: wrap;
+}
+.stat-item { text-align: center; }
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #34d399;
+}
+.stat-value.blue { color: #38bdf8; }
+.stat-value.amber { color: #fbbf24; }
+.stat-value.purple { color: #a78bfa; }
+.stat-value.red { color: #f87171; }
+.stat-label {
+  font-size: 0.8rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 4px;
+}
+
+/* Main grid */
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+@media (max-width: 900px) {
+  .main { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 2rem; }
+  .stats-bar { gap: 20px; }
+  .stat-value { font-size: 1.4rem; }
+  .narrative-steps { flex-direction: column; align-items: center; }
+  .pathway-cards { flex-direction: column; }
+}
+
+.card {
+  background: #1e293b;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid #334155;
+}
+.card h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 4px; }
+.card .subtitle { font-size: 0.85rem; color: #64748b; margin-bottom: 16px; }
+.card.full-width { grid-column: 1 / -1; }
+
+/* Select */
+select {
+  background: #0f172a;
+  color: #e2e8f0;
+  border: 1px solid #334155;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+/* Insight box */
+.insight-box {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-left: 4px solid #34d399;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-top: 16px;
+  font-size: 0.9rem;
+  color: #94a3b8;
+  line-height: 1.5;
+}
+
+/* Narrative */
+.narrative {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 30px;
+}
+.narrative h2 { font-size: 1.4rem; margin-bottom: 12px; color: #f8fafc; }
+.narrative-steps {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.narrative-step {
+  background: #1e293b;
+  border-radius: 12px;
+  padding: 24px;
+  width: 300px;
+  border: 1px solid #334155;
+  text-align: left;
+}
+.narrative-step .step-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.narrative-step .step-label.setup { color: #34d399; }
+.narrative-step .step-label.conflict { color: #f87171; }
+.narrative-step .step-label.resolution { color: #38bdf8; }
+.narrative-step p { font-size: 0.9rem; color: #94a3b8; line-height: 1.6; }
+.narrative-step .big-number { font-size: 1.6rem; font-weight: 700; margin: 8px 0; }
+
+/* Pathway cards */
+.pathway-cards {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+.pathway-card {
+  flex: 1;
+  min-width: 220px;
+  background: #0f172a;
+  border-radius: 10px;
+  padding: 20px;
+  border: 1px solid #334155;
+  position: relative;
+  overflow: hidden;
+}
+.pathway-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.pathway-card.solar::before { background: #fbbf24; }
+.pathway-card.wind::before { background: #38bdf8; }
+.pathway-card.battery::before { background: #34d399; }
+.pathway-card.grid::before { background: #a78bfa; }
+.pathway-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+.pathway-card .salary { font-size: 1.4rem; font-weight: 700; margin: 6px 0; }
+.pathway-card .salary.solar { color: #fbbf24; }
+.pathway-card .salary.wind { color: #38bdf8; }
+.pathway-card .salary.battery { color: #34d399; }
+.pathway-card .salary.grid { color: #a78bfa; }
+.pathway-card .detail { font-size: 0.8rem; color: #64748b; line-height: 1.5; }
+.pathway-card .badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-top: 8px;
+}
+.badge.no-degree { background: rgba(52,211,153,0.15); color: #34d399; }
+.badge.cert { background: rgba(251,191,36,0.15); color: #fbbf24; }
+.badge.assoc { background: rgba(56,189,248,0.15); color: #38bdf8; }
+
+/* Comparison table */
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+.compare-table th {
+  text-align: left;
+  padding: 10px 12px;
+  color: #94a3b8;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #334155;
+}
+.compare-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #1e293b;
+  font-size: 0.9rem;
+}
+.compare-table tr:hover { background: rgba(52,211,153,0.05); }
+
+/* Slider */
+.slider-section {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  border-radius: 12px;
+  padding: 30px;
+  border: 1px solid #334155;
+  text-align: center;
+}
+.slider-section h2 { font-size: 1.3rem; margin-bottom: 6px; }
+.slider-section .subtitle { color: #64748b; font-size: 0.9rem; margin-bottom: 20px; }
+.slider-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 500px;
+  max-width: 80%;
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #334155, #34d399);
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: #34d399;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(52,211,153,0.5);
+}
+.slider-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #34d399;
+  min-width: 80px;
+}
+.impact-result {
+  font-size: 1.05rem;
+  color: #38bdf8;
+  margin-top: 10px;
+  min-height: 28px;
+  line-height: 1.5;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 24px 20px;
+  color: #475569;
+  font-size: 0.8rem;
+  border-top: 1px solid #1e293b;
+  margin-top: 20px;
+  line-height: 1.6;
+}
+.footer a { color: #34d399; text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+
+canvas { max-height: 300px; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>JobVolt</h1>
+  <p class="tagline">The two fastest-growing jobs in America are both in clean energy.</p>
+  <p class="sub-tagline">Mapping the workforce revolution powering the energy transition &mdash; and who gets to be part of it.</p>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-value">3.5M</div>
+    <div class="stat-label">Clean Energy Jobs in the US</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value blue">+60%</div>
+    <div class="stat-label">Wind Tech Growth (BLS #1)</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value amber">+48%</div>
+    <div class="stat-label">Solar Installer Growth (BLS #2)</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value purple">$2.3T</div>
+    <div class="stat-label">Global Clean Energy Investment</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value">No Degree</div>
+    <div class="stat-label">Required for Entry-Level Roles</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- NARRATIVE -->
+<div class="narrative">
+  <h2>The Story in Three Acts</h2>
+  <div class="narrative-steps">
+    <div class="narrative-step">
+      <div class="step-label setup">Setup</div>
+      <div class="big-number" style="color:#34d399;">#1 and #2</div>
+      <p>The Bureau of Labor Statistics ranks the two fastest-growing occupations in America: wind turbine service technician (+60%) and solar photovoltaic installer (+48%). Both in clean energy. Both accessible without a 4-year degree. The industry employs 3.5 million Americans and is growing 3x faster than the overall economy.</p>
+    </div>
+    <div class="narrative-step">
+      <div class="step-label conflict">Conflict</div>
+      <div class="big-number" style="color:#f87171;">500,000 Gap</div>
+      <p>The US needs 500,000+ additional clean energy workers by 2030 to meet deployment targets. But training programs can't keep up. Rural communities with the best wind and solar resources have the fewest training centers. The workforce bottleneck is now the #1 barrier to clean energy deployment &mdash; not cost, not technology.</p>
+    </div>
+    <div class="narrative-step">
+      <div class="step-label resolution">Resolution</div>
+      <div class="big-number" style="color:#38bdf8;">$45-55K</div>
+      <p>Entry-level clean energy jobs pay $45,000-$55,000 with a certification or associate degree &mdash; no bachelor's required. Median solar installer: $48,800. Median wind tech: $61,770. Electricians in the energy sector: $65,000+. These are middle-class careers accessible to people from any background.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CHART 1: BLS Fastest Growing Jobs -->
+<div class="card">
+  <h2>BLS Fastest-Growing Occupations (2023-2033)</h2>
+  <div class="subtitle">Projected growth rate by occupation &mdash; Bureau of Labor Statistics</div>
+  <canvas id="blsChart"></canvas>
+</div>
+
+<!-- CHART 2: Clean Energy Jobs Over Time -->
+<div class="card">
+  <h2>Clean Energy Jobs: The Growth Curve</h2>
+  <div class="subtitle">US clean energy employment, millions (DOE/USEER)</div>
+  <canvas id="jobsTimeChart"></canvas>
+</div>
+
+<!-- CHART 3: Jobs by Sector -->
+<div class="card">
+  <h2>Where the Jobs Are</h2>
+  <div class="subtitle">Clean energy employment by sector, 2024</div>
+  <canvas id="sectorChart"></canvas>
+</div>
+
+<!-- CHART 4: Salary Comparison -->
+<div class="card">
+  <h2>What They Pay: Clean Energy vs Alternatives</h2>
+  <div class="subtitle">Median annual salary &mdash; BLS 2024</div>
+  <canvas id="salaryChart"></canvas>
+</div>
+
+<!-- CAREER PATHWAYS -->
+<div class="card full-width">
+  <h2>Career Pathways: No 4-Year Degree Required</h2>
+  <div class="subtitle">Entry points into the clean energy workforce</div>
+  <div class="pathway-cards">
+    <div class="pathway-card solar">
+      <h3>Solar Installer</h3>
+      <div class="salary solar">$48,800</div>
+      <div class="detail">
+        Install and maintain solar panels on rooftops and ground mounts. Physical, outdoor work. Most employers provide on-the-job training.
+      </div>
+      <div class="badge no-degree">No degree needed</div>
+    </div>
+    <div class="pathway-card wind">
+      <h3>Wind Turbine Technician</h3>
+      <div class="salary wind">$61,770</div>
+      <div class="detail">
+        Maintain and repair wind turbines. Climb 300+ foot towers. Requires technical aptitude and comfort with heights. 2-year programs available.
+      </div>
+      <div class="badge cert">Certificate or Associate</div>
+    </div>
+    <div class="pathway-card battery">
+      <h3>Battery Storage Tech</h3>
+      <div class="salary battery">$56,200</div>
+      <div class="detail">
+        Install, monitor, and maintain grid-scale battery systems. The newest and fastest-growing role. Electrical background helps.
+      </div>
+      <div class="badge cert">Certificate + OJT</div>
+    </div>
+    <div class="pathway-card grid">
+      <h3>Energy Electrician</h3>
+      <div class="salary grid">$65,280</div>
+      <div class="detail">
+        Wire solar arrays, connect storage systems, upgrade grid infrastructure. Union apprenticeships are a strong pathway. High demand everywhere.
+      </div>
+      <div class="badge assoc">Apprenticeship</div>
+    </div>
+  </div>
+  <div class="insight-box" style="margin-top:20px;">
+    <strong>The Pursuit angle:</strong> These are careers accessible to people in career transition &mdash; certification programs run 3-12 months, many employers hire and train, and demand far outstrips supply. The clean energy workforce looks like America: 40% of solar workers have no college degree.
+  </div>
+</div>
+
+<!-- CHART 5: Industry Comparison Table -->
+<div class="card full-width">
+  <h2>Industry Showdown: Why Clean Energy Wins for Workers</h2>
+  <div class="subtitle">Comparing entry barriers, pay, and growth across industries</div>
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Industry</th>
+        <th>Market Size</th>
+        <th>Job Growth</th>
+        <th>US Jobs</th>
+        <th>Entry Salary</th>
+        <th>Degree Required?</th>
+        <th>Entry Barrier</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="font-weight:600;color:#34d399;">Clean Energy</td>
+        <td>$1.6T</td>
+        <td style="color:#34d399;font-weight:600;">+48-60%</td>
+        <td>3.5M</td>
+        <td style="color:#34d399;">$45-55K</td>
+        <td style="color:#34d399;">No</td>
+        <td style="color:#34d399;">Low (certs)</td>
+      </tr>
+      <tr>
+        <td style="font-weight:600;">Healthcare</td>
+        <td>$4.87T</td>
+        <td>+5.8%</td>
+        <td>16M+</td>
+        <td>$35-75K</td>
+        <td>Usually</td>
+        <td>High (degrees)</td>
+      </tr>
+      <tr>
+        <td style="font-weight:600;">AI / Tech</td>
+        <td>$391B</td>
+        <td style="color:#fbbf24;">+30.6%</td>
+        <td>~250K</td>
+        <td>$85-120K</td>
+        <td>Usually</td>
+        <td style="color:#f87171;">Very high (CS degree)</td>
+      </tr>
+      <tr>
+        <td style="font-weight:600;">Fintech</td>
+        <td>$395B</td>
+        <td>+18.2%</td>
+        <td>~250K global</td>
+        <td>$60-80K</td>
+        <td>Often</td>
+        <td>Moderate</td>
+      </tr>
+      <tr>
+        <td style="font-weight:600;">Construction</td>
+        <td>$2.1T</td>
+        <td>+4%</td>
+        <td>8M</td>
+        <td>$38-48K</td>
+        <td>No</td>
+        <td>Low</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="insight-box" style="border-left-color:#38bdf8;">
+    <strong>The math:</strong> Clean energy has the highest growth rate of any accessible industry. AI grows faster by percentage, but requires a CS degree and has 1/14th the jobs. Healthcare has more jobs but grows slowly and demands years of education. Clean energy is the sweet spot: high growth, high demand, low barrier to entry.
+  </div>
+</div>
+
+<!-- CHART 6: State Explorer -->
+<div class="card">
+  <h2>State Job Explorer</h2>
+  <div class="subtitle">Clean energy employment and growth by state</div>
+  <select id="stateSelect">
+    <option value="CA">California</option>
+    <option value="TX">Texas</option>
+    <option value="FL">Florida</option>
+    <option value="NY">New York</option>
+    <option value="IL">Illinois</option>
+    <option value="CO">Colorado</option>
+    <option value="AZ">Arizona</option>
+    <option value="GA">Georgia</option>
+    <option value="NC">North Carolina</option>
+    <option value="MA">Massachusetts</option>
+  </select>
+  <canvas id="stateChart"></canvas>
+  <div class="insight-box" id="stateInsight"></div>
+</div>
+
+<!-- CHART 7: Investment Driving Jobs -->
+<div class="card">
+  <h2>Follow the Money: Investment Creates Jobs</h2>
+  <div class="subtitle">Where the $2.3T in clean energy investment goes</div>
+  <canvas id="investChart"></canvas>
+</div>
+
+<!-- SIMULATOR -->
+<div class="slider-section">
+  <h2>What-If: Closing the Workforce Gap</h2>
+  <div class="subtitle">If we scaled training programs to meet demand, how many workers enter the workforce?</div>
+  <div class="slider-row">
+    <span style="color:#64748b;">Current</span>
+    <input type="range" min="0" max="100" value="0" id="trainSlider">
+    <span class="slider-value" id="trainLabel">0%</span>
+  </div>
+  <canvas id="simChart" style="max-height:280px;margin:0 auto;max-width:700px;"></canvas>
+  <div class="impact-result" id="impactResult">Drag the slider to scale up workforce training programs.</div>
+</div>
+
+<!-- CHART 8: The Degree Myth -->
+<div class="card full-width">
+  <h2>The Degree Myth: Education Levels in Clean Energy</h2>
+  <div class="subtitle">Highest education level of current clean energy workers &mdash; DOE USEER 2024</div>
+  <canvas id="educationChart" style="max-height:250px;"></canvas>
+</div>
+
+</div><!-- /main -->
+
+<div class="footer">
+  Data: <a href="https://www.bls.gov/ooh/">BLS Occupational Outlook</a> |
+  <a href="https://www.energy.gov/policy/us-energy-employment-jobs-report-useer">DOE USEER</a> |
+  <a href="https://www.irena.org/Data">IRENA</a> |
+  <a href="https://about.bnef.com/">BloombergNEF</a> |
+  <a href="https://www.thesolarfoundation.org/">Solar Foundation</a><br>
+  Built by Juan, Ismael &amp; Kevin &mdash; Pursuit Cycle 3 |
+  <a href="https://ismaelcaraballo-afk.github.io/storagescout/">StorageScout</a> |
+  <a href="https://ismaelcaraballo-afk.github.io/gridgap/">GridGap</a>
+</div>
+
+<script>
+// =========================================================
+//  DATA (BLS, DOE USEER, IRENA, BloombergNEF)
+// =========================================================
+
+// BLS Fastest Growing Occupations 2023-2033
+const blsJobs = [
+  'Wind Turbine Tech',
+  'Solar Installer',
+  'Nurse Practitioner',
+  'Data Scientist',
+  'Info Security Analyst',
+  'Statistician',
+  'Med/Health Svcs Mgr',
+  'Epidemiologist',
+  'PA (Physician Asst)',
+  'Software Developer'
+];
+const blsGrowth = [60, 48, 46, 36, 33, 32, 29, 27, 27, 25];
+const blsSalary = [61770, 48800, 126260, 108020, 120360, 104110, 110680, 78520, 130020, 132270];
+
+// Clean energy employment over time (millions)
+const jobYears = ['2018','2019','2020','2021','2022','2023','2024'];
+const jobMillions = [2.3, 2.5, 2.2, 2.7, 3.0, 3.3, 3.5];
+
+// Jobs by sector
+const sectors = ['Solar','Energy Efficiency','Wind','Battery/Storage','Grid Modernization','EV/Transport','Bioenergy'];
+const sectorJobs = [370, 890, 125, 95, 310, 480, 230]; // thousands
+
+// Salary comparison
+const salaryRoles = ['Solar Installer','Wind Tech','Battery Tech','Energy Electrician','Retail Worker','Warehouse Worker','Fast Food Mgr'];
+const salaryAmounts = [48800, 61770, 56200, 65280, 33560, 38430, 37570];
+const salaryColors = ['#fbbf24','#38bdf8','#34d399','#a78bfa','#64748b','#64748b','#64748b'];
+
+// State data
+const stateData = {
+  'CA': {jobs:500000, solar:150000, wind:8000, efficiency:180000, growth:12, avgSalary:55000,
+    insight:"California leads with 500K clean energy jobs — more than any other state. Massive solar workforce (150K) driven by the state's aggressive renewable mandates. Average salary $55K, and community colleges offer fast-track solar installation certificates."},
+  'TX': {jobs:310000, solar:55000, wind:42000, efficiency:110000, growth:18, avgSalary:52000,
+    insight:"Texas is the fastest-growing clean energy jobs market (+18%/year). Wind dominates in west Texas, solar is exploding statewide. No state income tax makes $52K go further here. Red state, green jobs — economics not politics."},
+  'FL': {jobs:175000, solar:40000, wind:1000, efficiency:80000, growth:15, avgSalary:48000,
+    insight:"Florida's solar workforce is booming — 40K jobs and growing 15%/year. Rooftop solar installation is the main driver. Hurricane resilience is creating demand for solar+battery installers at the residential level."},
+  'NY': {jobs:165000, solar:25000, wind:10000, efficiency:85000, growth:10, avgSalary:58000,
+    insight:"New York's $58K average reflects higher cost of living but also strong union presence in the energy sector. Offshore wind projects (Empire Wind, Sunrise Wind) are creating a new job category that doesn't exist yet in most states."},
+  'IL': {jobs:120000, solar:12000, wind:15000, efficiency:65000, growth:14, avgSalary:53000,
+    insight:"Illinois jumped thanks to the Climate and Equitable Jobs Act, which mandates equity in clean energy hiring. 40% of new clean energy jobs must go to underrepresented communities. A model for inclusive workforce development."},
+  'CO': {jobs:75000, solar:15000, wind:8000, efficiency:30000, growth:13, avgSalary:54000,
+    insight:"Colorado punches above its weight — 75K jobs in a state of 5.8M people. NREL (National Renewable Energy Lab) is headquartered in Golden, CO, creating a research-to-jobs pipeline unique in the country."},
+  'AZ': {jobs:65000, solar:28000, wind:2000, efficiency:20000, growth:16, avgSalary:49000,
+    insight:"Arizona is a solar installer's paradise — 300 days of sunshine and a 16% job growth rate. Entry-level solar installers can start with no experience and train on the job. The bottleneck is literally finding enough people to hire."},
+  'GA': {jobs:55000, solar:18000, wind:1000, efficiency:22000, growth:14, avgSalary:47000,
+    insight:"Georgia is a surprise riser — solar deployment is driving a new workforce in a state without a renewable mandate. Proof that economics, not policy, is the primary driver of clean energy jobs in the South."},
+  'NC': {jobs:60000, solar:22000, wind:3000, efficiency:20000, growth:11, avgSalary:48000,
+    insight:"North Carolina ranks 4th nationally in solar capacity and has a growing offshore wind opportunity at the coast. Duke Energy's grid modernization investments are creating thousands of electrician and lineworker positions."},
+  'MA': {jobs:105000, solar:20000, wind:5000, efficiency:55000, growth:9, avgSalary:62000,
+    insight:"Massachusetts leads in energy efficiency jobs (55K) and pays the highest average in the sector ($62K). Offshore wind projects at Vineyard Wind are building an entirely new maritime clean energy workforce."},
+};
+
+// Investment breakdown (billions)
+const investCategories = ['Renewables','Electrified Transport','Grid & Storage','Energy Efficiency','Hydrogen','Nuclear'];
+const investBillions = [690, 480, 483, 380, 25, 40];
+
+// Education levels of clean energy workers
+const eduLevels = ['No College Degree','Some College/Cert','Associate Degree',"Bachelor's Degree","Master's/PhD"];
+const eduPercent = [40, 22, 15, 18, 5];
+
+// =========================================================
+//  CHART 1: BLS Fastest Growing
+// =========================================================
+new Chart(document.getElementById('blsChart'), {
+  type: 'bar',
+  data: {
+    labels: blsJobs,
+    datasets: [{
+      label: 'Projected Growth %',
+      data: blsGrowth,
+      backgroundColor: blsGrowth.map((g, i) => i < 2 ? 'rgba(52,211,153,0.8)' : 'rgba(56,189,248,0.4)'),
+      borderColor: blsGrowth.map((g, i) => i < 2 ? '#34d399' : '#38bdf8'),
+      borderWidth: 2,
+      borderRadius: 6,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            const i = ctx.dataIndex;
+            return '+' + ctx.parsed.x + '% growth | Median: $' + blsSalary[i].toLocaleString();
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        title: { display: true, text: 'Projected Growth Rate (%) 2023-2033', color: '#64748b' },
+        grid: { color: '#1e293b' },
+        ticks: { color: '#94a3b8', callback: v => '+' + v + '%' }
+      },
+      y: { ticks: { color: '#94a3b8', font: { size: 11 } }, grid: { display: false } }
+    }
+  }
+});
+
+// =========================================================
+//  CHART 2: Jobs Over Time
+// =========================================================
+new Chart(document.getElementById('jobsTimeChart'), {
+  type: 'line',
+  data: {
+    labels: jobYears,
+    datasets: [{
+      label: 'Clean Energy Jobs (Millions)',
+      data: jobMillions,
+      borderColor: '#34d399',
+      backgroundColor: 'rgba(52,211,153,0.1)',
+      borderWidth: 3,
+      tension: 0.3,
+      fill: true,
+      pointRadius: 5,
+      pointBackgroundColor: '#34d399',
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.parsed.y + 'M jobs' } }
+    },
+    scales: {
+      y: {
+        title: { display: true, text: 'Millions of Workers', color: '#64748b' },
+        grid: { color: '#1e293b' },
+        ticks: { color: '#94a3b8', callback: v => v + 'M' },
+        min: 0
+      },
+      x: { ticks: { color: '#94a3b8' }, grid: { display: false } }
+    }
+  }
+});
+
+// =========================================================
+//  CHART 3: Jobs by Sector (Doughnut)
+// =========================================================
+new Chart(document.getElementById('sectorChart'), {
+  type: 'doughnut',
+  data: {
+    labels: sectors,
+    datasets: [{
+      data: sectorJobs,
+      backgroundColor: ['#fbbf24','#34d399','#38bdf8','#a78bfa','#f87171','#fb923c','#6b7280'],
+      borderColor: '#1e293b',
+      borderWidth: 2,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'right',
+        labels: { color: '#94a3b8', padding: 12, boxWidth: 14, font: { size: 11 } }
+      },
+      tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.parsed.toLocaleString() + 'K jobs' } }
+    }
+  }
+});
+
+// =========================================================
+//  CHART 4: Salary Comparison
+// =========================================================
+new Chart(document.getElementById('salaryChart'), {
+  type: 'bar',
+  data: {
+    labels: salaryRoles,
+    datasets: [{
+      label: 'Median Salary',
+      data: salaryAmounts,
+      backgroundColor: salaryColors.map(c => c + 'cc'),
+      borderColor: salaryColors,
+      borderWidth: 2,
+      borderRadius: 6,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.y.toLocaleString() + '/year' } }
+    },
+    scales: {
+      y: {
+        title: { display: true, text: 'Median Annual Salary', color: '#64748b' },
+        grid: { color: '#1e293b' },
+        ticks: { color: '#94a3b8', callback: v => '$' + (v/1000) + 'K' },
+        min: 0
+      },
+      x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { display: false } }
+    }
+  }
+});
+
+// =========================================================
+//  CHART 6: State Explorer
+// =========================================================
+let stateChart = null;
+function updateState() {
+  const st = document.getElementById('stateSelect').value;
+  const d = stateData[st];
+  if (stateChart) stateChart.destroy();
+  stateChart = new Chart(document.getElementById('stateChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Solar','Wind','Efficiency','Total Jobs'],
+      datasets: [{
+        data: [d.solar/1000, d.wind/1000, d.efficiency/1000, d.jobs/1000],
+        backgroundColor: ['#fbbf24','#38bdf8','#34d399','#a78bfa'],
+        borderRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => Math.round(ctx.parsed.y * 1000).toLocaleString() + ' jobs' } }
+      },
+      scales: {
+        y: {
+          title: { display: true, text: 'Jobs (thousands)', color: '#64748b' },
+          grid: { color: '#1e293b' },
+          ticks: { color: '#94a3b8', callback: v => v + 'K' }
+        },
+        x: { ticks: { color: '#94a3b8' }, grid: { display: false } }
+      }
+    }
+  });
+  document.getElementById('stateInsight').innerHTML = '<strong>Insight:</strong> ' + d.insight +
+    '<br><br><strong>Growth rate:</strong> +' + d.growth + '%/year | <strong>Avg salary:</strong> $' + d.avgSalary.toLocaleString();
+}
+document.getElementById('stateSelect').onchange = updateState;
+updateState();
+
+// =========================================================
+//  CHART 7: Investment Breakdown
+// =========================================================
+new Chart(document.getElementById('investChart'), {
+  type: 'bar',
+  data: {
+    labels: investCategories,
+    datasets: [{
+      label: 'Investment ($B)',
+      data: investBillions,
+      backgroundColor: ['#34d399','#fb923c','#38bdf8','#fbbf24','#a78bfa','#f87171'],
+      borderRadius: 6,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.y + 'B' } }
+    },
+    scales: {
+      y: {
+        title: { display: true, text: 'Investment ($ Billions)', color: '#64748b' },
+        grid: { color: '#1e293b' },
+        ticks: { color: '#94a3b8', callback: v => '$' + v + 'B' }
+      },
+      x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { display: false } }
+    }
+  }
+});
+
+// =========================================================
+//  SIMULATOR
+// =========================================================
+const simYears = ['2024','2025','2026','2027','2028','2029','2030'];
+const simBaseJobs = [3.5, 3.8, 4.1, 4.4, 4.6, 4.8, 5.0]; // millions, baseline
+const simDemand =   [3.5, 3.9, 4.3, 4.8, 5.2, 5.5, 5.8]; // what's needed
+
+let simChart = new Chart(document.getElementById('simChart'), {
+  type: 'line',
+  data: {
+    labels: simYears,
+    datasets: [
+      {
+        label: 'Workforce (Trained)',
+        data: [...simBaseJobs],
+        borderColor: '#34d399',
+        backgroundColor: 'rgba(52,211,153,0.1)',
+        borderWidth: 3, tension: 0.3, fill: true,
+      },
+      {
+        label: 'Workforce Needed',
+        data: simDemand,
+        borderColor: '#f87171',
+        borderWidth: 3,
+        borderDash: [8, 4],
+        tension: 0.3,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: { legend: { labels: { color: '#94a3b8' } } },
+    scales: {
+      y: {
+        title: { display: true, text: 'Workers (Millions)', color: '#64748b' },
+        grid: { color: '#1e293b' },
+        ticks: { color: '#94a3b8', callback: v => v + 'M' }
+      },
+      x: { ticks: { color: '#94a3b8' }, grid: { display: false } }
+    }
+  }
+});
+
+const trainSlider = document.getElementById('trainSlider');
+const trainLabel = document.getElementById('trainLabel');
+const impactResult = document.getElementById('impactResult');
+
+function updateSim() {
+  const pct = parseInt(trainSlider.value);
+  trainLabel.textContent = pct + '%';
+
+  const boosted = simBaseJobs.map((base, i) => {
+    if (i === 0) return base;
+    const gap = simDemand[i] - simBaseJobs[i];
+    return Math.round((base + gap * (pct / 100)) * 100) / 100;
+  });
+
+  simChart.data.datasets[0].data = boosted;
+  simChart.update();
+
+  if (pct > 0) {
+    const extraWorkers = Math.round((boosted[6] - simBaseJobs[6]) * 1000000);
+    const gapClosed = Math.round(pct);
+    impactResult.innerHTML =
+      'Scaling training by <strong>' + pct + '%</strong> adds <strong>' +
+      extraWorkers.toLocaleString() + '</strong> workers by 2030, closing <strong>' +
+      gapClosed + '%</strong> of the workforce gap. ' +
+      (pct >= 80 ? 'The green line meets the red line &mdash; full deployment capacity unlocked.' :
+       pct >= 50 ? 'Major progress, but still a gap. More apprenticeships and community college programs needed.' :
+       'A good start, but the gap between supply and demand remains wide.');
+  } else {
+    impactResult.innerHTML = 'Drag the slider to scale up workforce training programs.';
+  }
+}
+trainSlider.oninput = updateSim;
+
+// =========================================================
+//  CHART 8: Education Levels (Horizontal stacked)
+// =========================================================
+new Chart(document.getElementById('educationChart'), {
+  type: 'bar',
+  data: {
+    labels: eduLevels,
+    datasets: [{
+      label: '% of Clean Energy Workers',
+      data: eduPercent,
+      backgroundColor: ['#34d399','#38bdf8','#fbbf24','#a78bfa','#fb923c'],
+      borderRadius: 6,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.parsed.x + '% of workforce' } }
+    },
+    scales: {
+      x: {
+        title: { display: true, text: '% of Clean Energy Workforce', color: '#64748b' },
+        grid: { color: '#1e293b' },
+        ticks: { color: '#94a3b8', callback: v => v + '%' },
+        max: 50
+      },
+      y: { ticks: { color: '#94a3b8' }, grid: { display: false } }
+    }
+  }
+});
+</script>
+</body>
+</html>
